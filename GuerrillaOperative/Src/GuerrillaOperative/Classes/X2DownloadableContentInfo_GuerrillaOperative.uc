@@ -1,0 +1,1 @@
+class X2DownloadableContentInfo_GuerrillaOperative extends X2DownloadableContentInfo Config(Game);

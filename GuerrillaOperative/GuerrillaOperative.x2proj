@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Default" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Guid>87f381df-bce9-49d6-b1d9-ed72b3c302ec</Guid>
+    <Name>Guerrilla Operative</Name>
+    <Description>A classless system for XCOM Operatives, combining a standard veterancy track with weapon specialisations and officer training.</Description>
+    <SteamPublishID>0</SteamPublishID>
+    <AssemblyName>GuerrillaOperative</AssemblyName>
+    <RootNamespace>GuerrillaOperative</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="Config\XComEditor.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComEngine.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Config\XComGame.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ReadMe.txt" />
+    <Content Include="Src\GuerrillaOperative\Classes\X2DownloadableContentInfo_GuerrillaOperative.uc">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config" />
+    <Folder Include="Localization" />
+    <Folder Include="Content" />
+    <Folder Include="Src" />
+    <Folder Include="Src\GuerrillaOperative" />
+    <Folder Include="Src\GuerrillaOperative\Classes" />
+  </ItemGroup>
+  <Import Project="$(MSBuildLocalExtensionPath)\XCOM2.targets" />
+</Project>
