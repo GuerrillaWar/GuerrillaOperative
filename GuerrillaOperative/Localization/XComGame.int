@@ -1,0 +1,5 @@
+[Operative X2SoldierClassTemplate]
+DisplayName="XCOM Operative"
+ClassSummary="Highly trained XCOM Operators for high risk missions."
+LeftAbilityTreeTitle="Offensive"
+RightAbilityTreeTitle="Defensive"

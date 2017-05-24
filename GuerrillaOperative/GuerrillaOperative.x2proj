@@ -9,6 +9,9 @@
     <RootNamespace>GuerrillaOperative</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Config\XComClassData.ini">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Config\XComEditor.ini">
       <SubType>Content</SubType>
     </Content>
@@ -19,6 +22,15 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="ReadMe.txt" />
+    <Content Include="Src\GuerrillaOperative\Classes\GO_InsertBaseWeaponAbilities.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2Ability_LoadGrenades.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_LoadGrenades.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\X2DownloadableContentInfo_GuerrillaOperative.uc">
       <SubType>Content</SubType>
     </Content>
