@@ -21,7 +21,13 @@
     <Content Include="Config\XComGame.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\XComGame.int">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ReadMe.txt" />
+    <Content Include="Src\GuerrillaOperative\Classes\GO_AbilityDomainTemplate.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_InsertBaseWeaponAbilities.uc">
       <SubType>Content</SubType>
     </Content>
@@ -29,6 +35,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_LoadGrenades.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2StrategyElement_DefaultAbilityDomains.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\X2DownloadableContentInfo_GuerrillaOperative.uc">
