@@ -1,0 +1,24 @@
+[UIScreenListener_GO_AbilityDomains]
+strWeaponAbilitiesMenuText="Weapons Training"
+strWeaponAbilitiesMenuDescription="Give your soldiers da' skills to pay da billz."
+
+[GO_UIArmory_AbilityDomains]
+strScreenTitle="Weapon Abilities"
+
+[AbilityDomain_Melee GO_AbilityDomainTemplate]
+DisplayName="Melee"
+
+[AbilityDomain_Sniper GO_AbilityDomainTemplate]
+DisplayName="Sniper"
+
+[AbilityDomain_CQB GO_AbilityDomainTemplate]
+DisplayName="CQB"
+
+[AbilityDomain_Pistol GO_AbilityDomainTemplate]
+DisplayName="Pistol"
+
+[AbilityDomain_Rifle GO_AbilityDomainTemplate]
+DisplayName="Rifle"
+
+[AbilityDomain_AutomaticWeapon GO_AbilityDomainTemplate]
+DisplayName="AutomaticWeapon"

@@ -21,6 +21,9 @@
     <Content Include="Config\XComGame.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Localization\GuerrillaOperative.int">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\XComGame.int">
       <SubType>Content</SubType>
     </Content>
@@ -31,6 +34,12 @@
     <Content Include="Src\GuerrillaOperative\Classes\GO_InsertBaseWeaponAbilities.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_UIArmory_AbilityDomainRow.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_UIArmory_AbilityDomains.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Ability_LoadGrenades.uc">
       <SubType>Content</SubType>
     </Content>
@@ -38,6 +47,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2StrategyElement_DefaultAbilityDomains.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\UIScreenListener_GO_AbilityDomains.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\X2DownloadableContentInfo_GuerrillaOperative.uc">
