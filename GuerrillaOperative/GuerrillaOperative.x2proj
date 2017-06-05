@@ -49,6 +49,9 @@
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2StrategyElement_DefaultAbilityDomains.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GuerrillaOperativeUtilities.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\UIScreenListener_GO_AbilityDomains.uc">
       <SubType>Content</SubType>
     </Content>

@@ -45,6 +45,7 @@ simulated function PopulateData()
 	local string AbilityIcon1, AbilityIcon2, AbilityName1, AbilityName2, HeaderString;
 	local bool bHasAbility1, bHasAbility2;
 	local XComGameState_Unit Unit;
+	local GO_GameState_UnitDomainExperience UnitDomainState;
 	local X2AbilityTemplate AbilityTemplate1, AbilityTemplate2;
 	local X2AbilityTemplateManager AbilityTemplateManager;
   local X2StrategyElementTemplateManager Manager;
@@ -52,12 +53,12 @@ simulated function PopulateData()
   local X2StrategyElementTemplate Template;
   local GO_AbilityDomainTemplate DomainTemplate;
   local GO_UIArmory_AbilityDomainRow DomainRow;
-  local int ix;
+  local int ix, StatIx;
 
 
 	Unit = GetUnit();
+  UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
 	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
-
 
 	AS_SetTitle("", strScreenTitle, "", "", "");
 
@@ -82,7 +83,10 @@ simulated function PopulateData()
     {
       DomainRow = GO_UIArmory_AbilityDomainRow(
         List.CreateItem(class'GO_UIArmory_AbilityDomainRow')
-      ).InitDomainRow(DomainTemplate);
+      ).InitDomainRow(
+        DomainTemplate,
+        UnitDomainState.GetStatsForDomain(DomainTemplate.DataName)
+      );
     }
   }
 }

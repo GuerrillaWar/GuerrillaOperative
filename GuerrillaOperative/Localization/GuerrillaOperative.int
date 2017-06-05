@@ -21,4 +21,4 @@ DisplayName="Pistol"
 DisplayName="Rifle"
 
 [AbilityDomain_AutomaticWeapon GO_AbilityDomainTemplate]
-DisplayName="AutomaticWeapon"
+DisplayName="Automatic"
