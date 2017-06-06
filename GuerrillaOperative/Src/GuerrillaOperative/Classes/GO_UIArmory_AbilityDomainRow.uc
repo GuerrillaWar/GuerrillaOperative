@@ -1,20 +1,26 @@
 class GO_UIArmory_AbilityDomainRow extends UIPanel;
 
 var UIText DomainTextName;
+var UIText RankPointsText;
 var UIList AbilityList;
-var array<UIIcon> AbilityIcons;
+var array<UIIcon> CompetenceIcons;
+var array<UIIcon> ExpertiseIcons;
+var array<UIIcon> MasteryIcons;
 var GO_AbilityDomainTemplate AbilityDomainTemplate;
+var GO_UnitDomainStats CachedDomainStats;
+var UIPanel Experience;
+var GO_UIArmory_AbilityDomains ScreenUI;
+var bool CompetenceForPurchase, ExpertiseForPurchase, MasteryForPurchase;
 
 simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
-  GO_AbilityDomainTemplate DTemplate,
-  GO_UnitDomainStats DomainStats
+  GO_AbilityDomainTemplate DTemplate
 )
 {
   local UIIcon AbilityIcon;
   local name AbilityName;
   local X2AbilityTemplateManager Manager;
   local X2AbilityTemplate AbilityTemplate;
-  local UIPanel Experience, ExperienceBack, ExperienceMin, ExperienceMax;
+  local UIPanel ExperienceBack, ExperienceMin, ExperienceMax;
 
   local int TextPaddingLeft, PaddingTop, PaddingBottom, PaddingRight;
   local int TickHeight;
@@ -38,18 +44,25 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
   DomainTextName.SetHeight(40);
   DomainTextName.SetPosition(10, 10);
 
+  RankPointsText = Spawn(class'UIText', self);
+  RankPointsText.InitText(,"0");
+  RankPointsText.SetHeight(20);
+  RankPointsText.SetPosition(10, Height - 30);
+
   AbilityList = Spawn(class'UIList', self).InitList(
     , TextPaddingLeft, PaddingTop, Width - TextPaddingLeft, 66, true
   );
-  AbilityList.ItemPadding = 5;
+  AbilityList.ItemPadding = 10;
 
   foreach AbilityDomainTemplate.CompetenceAbilities(AbilityName) {
     AbilityTemplate = Manager.FindAbilityTemplate(AbilityName);
     AbilityIcon = UIIcon(AbilityList.CreateItem(class'UIIcon'));
-		AbilityIcon.InitIcon(,,,true,42,eUIState_Warning);
+		AbilityIcon.InitIcon(,,,true,42,eUIState_Disabled);
     AbilityIcon.LoadIcon(AbilityTemplate.IconImage);
 		AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.NORMAL_HTML_COLOR);
 		AbilityIcon.SetForegroundColor(class'UIUtilities_Colors'.const.BLACK_HTML_COLOR);
+    AbilityIcon.OnMouseEventDelegate = OnAbilityIconEvent;
+    CompetenceIcons.AddItem(AbilityIcon);
   }
 
   foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityName) {
@@ -59,6 +72,8 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
     AbilityIcon.LoadIcon(AbilityTemplate.IconImage);
 		AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.PERK_HTML_COLOR);
 		AbilityIcon.SetForegroundColor(class'UIUtilities_Colors'.const.BLACK_HTML_COLOR);
+    AbilityIcon.OnMouseEventDelegate = OnAbilityIconEvent;
+    ExpertiseIcons.AddItem(AbilityIcon);
   }
 
   foreach AbilityDomainTemplate.MasteryAbilities(AbilityName) {
@@ -68,6 +83,8 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
     AbilityIcon.LoadIcon(AbilityTemplate.IconImage);
 		/* AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.FADED_HTML_COLOR); */
 		AbilityIcon.SetForegroundColor(class'UIUtilities_Colors'.const.BLACK_HTML_COLOR);
+    AbilityIcon.OnMouseEventDelegate = OnAbilityIconEvent;
+    MasteryIcons.AddItem(AbilityIcon);
   }
 
   ExperienceBack = Spawn(class'UIPanel', self).InitPanel('', class'UIUtilities_Controls'.const.MC_GenericPixel);
@@ -92,13 +109,147 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
 	ExperienceMax.SetColor( class'UIUtilities_Colors'.const.NORMAL_HTML_COLOR);
 	ExperienceMax.SetAlpha( 15 );
 
-
-
-
   return self;
 }
 
 
+simulated function ApplyUnitStats(
+  GO_UnitDomainStats DomainStats
+)
+{
+  local int Earned, ToSpend, Ix;
+  local bool AbilityEarned;
+  local name AbilityName;
+  local UIIcon AbilityIcon;
+
+  CachedDomainStats = DomainStats;
+  Earned = DomainStats.EarnedAbilities.Length;
+  ToSpend = DomainStats.RankPoints;
+
+  RankPointsText.SetText("" $ ToSpend);
+
+  if (Earned >= 6 && ToSpend > 0)
+  {
+    MasteryForPurchase = true;
+    ExpertiseForPurchase = false;
+    CompetenceForPurchase = false;
+  }
+  else if (Earned >= 4 && ToSpend > 0)
+  {
+    ExpertiseForPurchase = true;
+    CompetenceForPurchase = false;
+    MasteryForPurchase = false;
+  }
+  else if (ToSpend > 0)
+  {
+    CompetenceForPurchase = true;
+    ExpertiseForPurchase = false;
+    MasteryForPurchase = false;
+  }
+  else
+  {
+    CompetenceForPurchase = false;
+    ExpertiseForPurchase = false;
+    MasteryForPurchase = false;
+  }
+
+  foreach AbilityDomainTemplate.CompetenceAbilities(AbilityName, Ix) {
+    AbilityIcon = CompetenceIcons[Ix];
+    AbilityEarned = (
+      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+    );
+
+    SetAbilityIconColor(AbilityIcon, AbilityEarned, CompetenceForPurchase);
+  }
+
+  foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityName, Ix) {
+    AbilityIcon = ExpertiseIcons[Ix];
+    AbilityEarned = (
+      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+    );
+
+    SetAbilityIconColor(AbilityIcon, AbilityEarned, ExpertiseForPurchase);
+  }
+
+  foreach AbilityDomainTemplate.MasteryAbilities(AbilityName, Ix) {
+    AbilityIcon = MasteryIcons[Ix];
+    AbilityEarned = (
+      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+    );
+
+    SetAbilityIconColor(AbilityIcon, AbilityEarned, MasteryForPurchase);
+  }
+}
+
+function SetAbilityIconColor(UIIcon AbilityIcon, bool Earned, bool Available)
+{
+  if (Earned)
+  {
+    AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.NORMAL_HTML_COLOR);
+  }
+  else if (Available)
+  {
+    AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.PERK_HTML_COLOR);
+  }
+  else
+  {
+    AbilityIcon.SetBGColor(class'UIUtilities_Colors'.const.DISABLED_HTML_COLOR);
+  }
+}
+
+simulated function OnAbilityIconEvent(UIPanel Panel, int Cmd)
+{
+  local UIIcon AbilityIcon;
+  local int AbilityIx;
+  local name AbilityName;
+  local bool AbilityEarned;
+
+  AbilityIcon = UIIcon(Panel);
+	if (Cmd == class'UIUtilities_Input'.const.FXS_L_MOUSE_DOWN)
+  {
+    AbilityIx = CompetenceIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE && CompetenceForPurchase)
+    {
+      AbilityName = AbilityDomainTemplate.CompetenceAbilities[AbilityIx];
+      AbilityEarned = (
+        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+      );
+
+      if (!AbilityEarned)
+      {
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+      }
+    }
+
+    AbilityIx = ExpertiseIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE && ExpertiseForPurchase)
+    {
+      AbilityName = AbilityDomainTemplate.ExpertiseAbilities[AbilityIx];
+      AbilityEarned = (
+        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+      );
+
+      if (!AbilityEarned)
+      {
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+      }
+    }
+
+    AbilityIx = MasteryIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE && MasteryForPurchase)
+    {
+      AbilityName = AbilityDomainTemplate.MasteryAbilities[AbilityIx];
+      AbilityEarned = (
+        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
+      );
+
+      if (!AbilityEarned)
+      {
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+      }
+    }
+  }
+}
 
 defaultproperties
 {

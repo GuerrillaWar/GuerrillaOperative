@@ -8,7 +8,7 @@ struct GO_EarnedAbility {
 };
 
 struct GO_UnitDomainStats {
-  var int Ranks;
+  var int RankPoints;
   var int Experience;
   var name DomainName;
   var array<GO_EarnedAbility> EarnedAbilities;
@@ -38,7 +38,7 @@ function InitDomains ()
     if (DomainIx == INDEX_NONE)
     {
       Stats = EmptyStats;
-      Stats.Ranks = 1;
+      Stats.RankPoints = Rand(7) + 1;
       Stats.Experience = 100;
       Stats.DomainName = DomainTemplate.DataName;
       DomainStats.AddItem(Stats);
@@ -61,4 +61,19 @@ function GO_UnitDomainStats GetStatsForDomain (name DataName)
     EmptyStats.DomainName = DataName;
     return EmptyStats;
   }
+}
+
+function LearnAbilityForDomain(name DomainName, name AbilityName)
+{
+  local GO_UnitDomainStats Domain;
+  local GO_EarnedAbility EarnedAbility;
+  local int DomainIx;
+
+  Domain = GetStatsForDomain(DomainName);
+  DomainIx = DomainStats.Find('DomainName', DomainName);
+
+  `assert(Domain.RankPoints > 0);
+  EarnedAbility.AbilityName = AbilityName;
+  DomainStats[DomainIx].EarnedAbilities.AddItem(EarnedAbility);
+  DomainStats[DomainIx].RankPoints = Domain.RankPoints - 1;
 }

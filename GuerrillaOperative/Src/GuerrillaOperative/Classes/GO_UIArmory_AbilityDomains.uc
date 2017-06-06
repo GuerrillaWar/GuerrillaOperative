@@ -4,6 +4,9 @@ class GO_UIArmory_AbilityDomains extends UIArmory_Promotion;
 
 var localized string strScreenTitle;
 
+
+delegate OnDomainAbilityLearn(name AbilityName, name DomainName);
+
 simulated function InitPromotion(StateObjectReference UnitRef, optional bool bInstantTransition)
 {
 	// If the AfterAction screen is running, let it position the camera
@@ -83,10 +86,33 @@ simulated function PopulateData()
     {
       DomainRow = GO_UIArmory_AbilityDomainRow(
         List.CreateItem(class'GO_UIArmory_AbilityDomainRow')
-      ).InitDomainRow(
-        DomainTemplate,
-        UnitDomainState.GetStatsForDomain(DomainTemplate.DataName)
-      );
+      ).InitDomainRow(DomainTemplate);
+      DomainRow.ScreenUI = self;
     }
+
+    DomainRow.ApplyUnitStats(
+      UnitDomainState.GetStatsForDomain(DomainTemplate.DataName)
+    );
   }
+}
+
+function LearnDomainAbility(name DomainName, name AbilityName)
+{
+	local XComGameState_Unit Unit;
+	local XComGameStateHistory History;
+  local XComGameState NewGameState;
+	local GO_GameState_UnitDomainExperience UnitDomainState;
+
+	History = `XCOMHISTORY;
+	Unit = GetUnit();
+  UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
+
+  NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("IniitUnitDomainExperience");
+  UnitDomainState = GO_GameState_UnitDomainExperience(
+    NewGameState.CreateStateObject(class'GO_GameState_UnitDomainExperience', UnitDomainState.ObjectID)
+  );
+  UnitDomainState.LearnAbilityForDomain(DomainName, AbilityName);
+  NewGameState.AddStateObject(UnitDomainState);
+  `XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+  PopulateData();
 }
