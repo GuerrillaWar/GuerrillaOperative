@@ -96,7 +96,9 @@ simulated function PopulateData()
   }
 }
 
-function LearnDomainAbility(name DomainName, name AbilityName)
+function LearnDomainAbility(
+  name DomainName, eGO_AbilityLevel AbilityLevel, int AbilityIx
+)
 {
 	local XComGameState_Unit Unit;
 	local XComGameStateHistory History;
@@ -111,7 +113,7 @@ function LearnDomainAbility(name DomainName, name AbilityName)
   UnitDomainState = GO_GameState_UnitDomainExperience(
     NewGameState.CreateStateObject(class'GO_GameState_UnitDomainExperience', UnitDomainState.ObjectID)
   );
-  UnitDomainState.LearnAbilityForDomain(DomainName, AbilityName);
+  UnitDomainState.LearnAbilityForDomain(DomainName, AbilityLevel, AbilityIx);
   NewGameState.AddStateObject(UnitDomainState);
   `XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
   PopulateData();

@@ -19,6 +19,7 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
   local UIIcon AbilityIcon;
   local name AbilityName;
   local X2AbilityTemplateManager Manager;
+  local GO_AbilityData AbilityData;
   local X2AbilityTemplate AbilityTemplate;
   local UIPanel ExperienceBack, ExperienceMin, ExperienceMax;
 
@@ -54,7 +55,8 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
   );
   AbilityList.ItemPadding = 10;
 
-  foreach AbilityDomainTemplate.CompetenceAbilities(AbilityName) {
+  foreach AbilityDomainTemplate.CompetenceAbilities(AbilityData) {
+    AbilityName = AbilityData.AbilityName;
     AbilityTemplate = Manager.FindAbilityTemplate(AbilityName);
     AbilityIcon = UIIcon(AbilityList.CreateItem(class'UIIcon'));
 		AbilityIcon.InitIcon(,,,true,42,eUIState_Disabled);
@@ -65,7 +67,8 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
     CompetenceIcons.AddItem(AbilityIcon);
   }
 
-  foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityName) {
+  foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityData) {
+    AbilityName = AbilityData.AbilityName;
     AbilityTemplate = Manager.FindAbilityTemplate(AbilityName);
     AbilityIcon = UIIcon(AbilityList.CreateItem(class'UIIcon'));
 		AbilityIcon.InitIcon(,,,true,42,eUIState_Disabled);
@@ -76,7 +79,8 @@ simulated function GO_UIArmory_AbilityDomainRow InitDomainRow(
     ExpertiseIcons.AddItem(AbilityIcon);
   }
 
-  foreach AbilityDomainTemplate.MasteryAbilities(AbilityName) {
+  foreach AbilityDomainTemplate.MasteryAbilities(AbilityData) {
+    AbilityName = AbilityData.AbilityName;
     AbilityTemplate = Manager.FindAbilityTemplate(AbilityName);
     AbilityIcon = UIIcon(AbilityList.CreateItem(class'UIIcon'));
 		AbilityIcon.InitIcon(,,,true,42,eUIState_Disabled);
@@ -119,7 +123,9 @@ simulated function ApplyUnitStats(
 {
   local int Earned, ToSpend, Ix;
   local bool AbilityEarned;
+  local GO_EarnedAbility EarnedAbilityIter;
   local name AbilityName;
+  local GO_AbilityData AbilityData;
   local UIIcon AbilityIcon;
 
   CachedDomainStats = DomainStats;
@@ -153,29 +159,38 @@ simulated function ApplyUnitStats(
     MasteryForPurchase = false;
   }
 
-  foreach AbilityDomainTemplate.CompetenceAbilities(AbilityName, Ix) {
+  foreach AbilityDomainTemplate.CompetenceAbilities(AbilityData, Ix) {
     AbilityIcon = CompetenceIcons[Ix];
-    AbilityEarned = (
-      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-    );
+    AbilityEarned = false;
+    foreach DomainStats.EarnedAbilities(EarnedAbilityIter) {
+      if (EarnedAbilityIter.Index == Ix && EarnedAbilityIter.Level == eGO_AbilityLevel_Competence) {
+        AbilityEarned = true;
+      }
+    }
 
     SetAbilityIconColor(AbilityIcon, AbilityEarned, CompetenceForPurchase);
   }
 
-  foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityName, Ix) {
+  foreach AbilityDomainTemplate.ExpertiseAbilities(AbilityData, Ix) {
     AbilityIcon = ExpertiseIcons[Ix];
-    AbilityEarned = (
-      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-    );
+    AbilityEarned = false;
+    foreach DomainStats.EarnedAbilities(EarnedAbilityIter) {
+      if (EarnedAbilityIter.Index == Ix && EarnedAbilityIter.Level == eGO_AbilityLevel_Expertise) {
+        AbilityEarned = true;
+      }
+    }
 
     SetAbilityIconColor(AbilityIcon, AbilityEarned, ExpertiseForPurchase);
   }
 
-  foreach AbilityDomainTemplate.MasteryAbilities(AbilityName, Ix) {
+  foreach AbilityDomainTemplate.MasteryAbilities(AbilityData, Ix) {
     AbilityIcon = MasteryIcons[Ix];
-    AbilityEarned = (
-      DomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-    );
+    AbilityEarned = false;
+    foreach DomainStats.EarnedAbilities(EarnedAbilityIter) {
+      if (EarnedAbilityIter.Index == Ix && EarnedAbilityIter.Level == eGO_AbilityLevel_Mastery) {
+        AbilityEarned = true;
+      }
+    }
 
     SetAbilityIconColor(AbilityIcon, AbilityEarned, MasteryForPurchase);
   }
@@ -202,50 +217,55 @@ simulated function OnAbilityIconEvent(UIPanel Panel, int Cmd)
   local UIIcon AbilityIcon;
   local int AbilityIx;
   local name AbilityName;
+  local GO_EarnedAbility EarnedAbilityIter;
   local bool AbilityEarned;
 
   AbilityIcon = UIIcon(Panel);
 	if (Cmd == class'UIUtilities_Input'.const.FXS_L_MOUSE_DOWN)
   {
     AbilityIx = CompetenceIcons.Find(AbilityIcon);
+    AbilityEarned = false;
     if (AbilityIx != INDEX_NONE && CompetenceForPurchase)
     {
-      AbilityName = AbilityDomainTemplate.CompetenceAbilities[AbilityIx];
-      AbilityEarned = (
-        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-      );
+      foreach CachedDomainStats.EarnedAbilities(EarnedAbilityIter) {
+        if (EarnedAbilityIter.Index == AbilityIx && EarnedAbilityIter.Level == eGO_AbilityLevel_Competence) {
+          AbilityEarned = true;
+        }
+      }
 
       if (!AbilityEarned)
       {
-        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Competence, AbilityIx);
       }
     }
 
     AbilityIx = ExpertiseIcons.Find(AbilityIcon);
     if (AbilityIx != INDEX_NONE && ExpertiseForPurchase)
     {
-      AbilityName = AbilityDomainTemplate.ExpertiseAbilities[AbilityIx];
-      AbilityEarned = (
-        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-      );
+      foreach CachedDomainStats.EarnedAbilities(EarnedAbilityIter) {
+        if (EarnedAbilityIter.Index == AbilityIx && EarnedAbilityIter.Level == eGO_AbilityLevel_Expertise) {
+          AbilityEarned = true;
+        }
+      }
 
       if (!AbilityEarned)
       {
-        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Expertise, AbilityIx);
       }
     }
 
     AbilityIx = MasteryIcons.Find(AbilityIcon);
     if (AbilityIx != INDEX_NONE && MasteryForPurchase)
     {
-      AbilityName = AbilityDomainTemplate.MasteryAbilities[AbilityIx];
-      AbilityEarned = (
-        CachedDomainStats.EarnedAbilities.Find('AbilityName', AbilityName) != INDEX_NONE
-      );
+      foreach CachedDomainStats.EarnedAbilities(EarnedAbilityIter) {
+        if (EarnedAbilityIter.Index == AbilityIx && EarnedAbilityIter.Level == eGO_AbilityLevel_Mastery) {
+          AbilityEarned = true;
+        }
+      }
 
       if (!AbilityEarned)
       {
-        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, AbilityName);
+        ScreenUI.LearnDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Mastery, AbilityIx);
       }
     }
   }

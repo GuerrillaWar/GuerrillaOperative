@@ -18,6 +18,7 @@ static function CheckDomainTemplates ()
   local array<X2StrategyElementTemplate> Templates;
   local X2StrategyElementTemplate Template;
   local GO_AbilityDomainTemplate DomainTemplate;
+  local GO_AbilityData AbilityData;
   local X2StrategyElementTemplateManager Manager;
   local name AbilityName;
 
@@ -29,21 +30,92 @@ static function CheckDomainTemplates ()
     DomainTemplate = GO_AbilityDomainTemplate(Template);
     `log("Template Name:" @ DomainTemplate.DataName);
     `log("Competence");
-    foreach DomainTemplate.CompetenceAbilities(AbilityName)
+    foreach DomainTemplate.CompetenceAbilities(AbilityData)
     {
-      `log("-" @ AbilityName);
+      `log("-" @ AbilityData.AbilityName);
     }
 
     `log("Expertise");
-    foreach DomainTemplate.ExpertiseAbilities(AbilityName)
+    foreach DomainTemplate.ExpertiseAbilities(AbilityData)
     {
-      `log("-" @ AbilityName);
+      `log("-" @ AbilityData.AbilityName);
     }
 
     `log("Mastery");
-    foreach DomainTemplate.MasteryAbilities(AbilityName)
+    foreach DomainTemplate.MasteryAbilities(AbilityData)
     {
-      `log("-" @ AbilityName);
+      `log("-" @ AbilityData.AbilityName);
+    }
+  }
+}
+
+
+
+static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
+{
+	local int Index;
+  local GO_AbilityDomainTemplate DomainTemplate;
+  local AbilitySetupData Setup, BlankSetupData;
+  local X2StrategyElementTemplateManager Manager;
+  local GO_UnitDomainStats DomainStats;
+  local GO_AbilityData AbilityData;
+  local GO_EarnedAbility EarnedAbility;
+	local X2AbilityTemplateManager AbilityTemplateManager;
+  local X2AbilityTemplate AbilityTemplate;
+  local XComGameState_Item InventoryItem;
+  local X2WeaponTemplate WeaponTemplate;
+  local array<XComGameState_Item> CurrentInventory;
+	local GO_GameState_UnitDomainExperience UnitDomainState;
+
+  UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetUnitDomainExperienceComponent(UnitState);
+  Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+
+  if (UnitDomainState == none) { return; }
+
+  `log("Processing Abilities for Unit");
+
+  foreach UnitDomainState.AllDomainStats(DomainStats)
+  {
+    DomainTemplate = GO_AbilityDomainTemplate(Manager.FindStrategyElementTemplate(DomainStats.DomainName));
+    `log("Domain:" @ DomainStats.DomainName);
+
+    foreach DomainStats.EarnedAbilities(EarnedAbility)
+    {
+      Setup = BlankSetupData;
+      switch (EarnedAbility.Level) {
+        case eGO_AbilityLevel_Competence: AbilityData = DomainTemplate.CompetenceAbilities[EarnedAbility.Index]; break;
+        case eGO_AbilityLevel_Expertise: AbilityData = DomainTemplate.ExpertiseAbilities[EarnedAbility.Index]; break;
+        case eGO_AbilityLevel_Mastery: AbilityData = DomainTemplate.MasteryAbilities[EarnedAbility.Index]; break;
+      }
+      AbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(AbilityData.AbilityName);
+
+      if (AbilityData.WeaponCategories.Length > 0) {
+
+        CurrentInventory = UnitState.GetAllInventoryItems(StartState);
+        foreach CurrentInventory(InventoryItem)
+        {
+          WeaponTemplate = X2WeaponTemplate(InventoryItem.GetMyTemplate());
+          if (WeaponTemplate != none)
+          {
+            if (AbilityData.WeaponCategories.Find(WeaponTemplate.WeaponCat) != INDEX_NONE)
+            {
+              Setup = BlankSetupData;
+              `log("Adding Ability:" @ AbilityData.AbilityName);
+              Setup.TemplateName = AbilityData.AbilityName;
+              Setup.Template = AbilityTemplate;
+              Setup.SourceWeaponRef = InventoryItem.GetReference();
+              SetupData.AddItem(Setup);
+            }
+          }
+        }
+      } else if (AbilityData.ItemCategories.Length > 0) {
+      } else {
+        `log("Adding Ability:" @ AbilityData.AbilityName);
+        Setup.TemplateName = AbilityData.AbilityName;
+        Setup.Template = AbilityTemplate;
+        SetupData.AddItem(Setup);
+      }
     }
   }
 }

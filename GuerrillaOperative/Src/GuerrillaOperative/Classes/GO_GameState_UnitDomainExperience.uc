@@ -1,11 +1,21 @@
 class GO_GameState_UnitDomainExperience extends XComGameState_BaseObject;
 
+enum eGO_AbilityLevel {
+  eGO_AbilityLevel_Competence,
+  eGO_AbilityLevel_Expertise,
+  eGO_AbilityLevel_Mastery,
+};
+
 
 struct GO_EarnedAbility {
-  var name AbilityName;
-  var array<name> ItemCategories;
-  var array<name> WeaponCategories;
+  var eGO_AbilityLevel Level;
+  var int Index;
+
+  structdefaultproperties {
+    Index = -1;
+  }
 };
+
 
 struct GO_UnitDomainStats {
   var int RankPoints;
@@ -15,7 +25,7 @@ struct GO_UnitDomainStats {
 };
 
 
-var array<GO_UnitDomainStats> DomainStats;
+var array<GO_UnitDomainStats> AllDomainStats;
 
 function InitDomains ()
 {
@@ -33,7 +43,7 @@ function InitDomains ()
   {
     DomainTemplate = GO_AbilityDomainTemplate(Template);
 
-    DomainIx = DomainStats.Find('DomainName', DomainTemplate.DataName);
+    DomainIx = AllDomainStats.Find('DomainName', DomainTemplate.DataName);
 
     if (DomainIx == INDEX_NONE)
     {
@@ -41,7 +51,7 @@ function InitDomains ()
       Stats.RankPoints = Rand(7) + 1;
       Stats.Experience = 100;
       Stats.DomainName = DomainTemplate.DataName;
-      DomainStats.AddItem(Stats);
+      AllDomainStats.AddItem(Stats);
     }
   }
 }
@@ -50,11 +60,11 @@ function GO_UnitDomainStats GetStatsForDomain (name DataName)
 {
   local int DomainIx;
   local GO_UnitDomainStats EmptyStats;
-  DomainIx = DomainStats.Find('DomainName', DataName);
+  DomainIx = AllDomainStats.Find('DomainName', DataName);
 
   if (DomainIx != INDEX_NONE)
   {
-    return DomainStats[DomainIx];
+    return AllDomainStats[DomainIx];
   }
   else
   {
@@ -63,17 +73,20 @@ function GO_UnitDomainStats GetStatsForDomain (name DataName)
   }
 }
 
-function LearnAbilityForDomain(name DomainName, name AbilityName)
+function LearnAbilityForDomain(
+  name DomainName, eGO_AbilityLevel AbilityLevel, int AbilityIx
+)
 {
   local GO_UnitDomainStats Domain;
   local GO_EarnedAbility EarnedAbility;
   local int DomainIx;
 
   Domain = GetStatsForDomain(DomainName);
-  DomainIx = DomainStats.Find('DomainName', DomainName);
+  DomainIx = AllDomainStats.Find('DomainName', DomainName);
 
   `assert(Domain.RankPoints > 0);
-  EarnedAbility.AbilityName = AbilityName;
-  DomainStats[DomainIx].EarnedAbilities.AddItem(EarnedAbility);
-  DomainStats[DomainIx].RankPoints = Domain.RankPoints - 1;
+  EarnedAbility.Level = AbilityLevel;
+  EarnedAbility.Index = AbilityIx;
+  AllDomainStats[DomainIx].EarnedAbilities.AddItem(EarnedAbility);
+  AllDomainStats[DomainIx].RankPoints = Domain.RankPoints - 1;
 }
