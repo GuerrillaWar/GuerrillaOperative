@@ -48,8 +48,8 @@ function InitDomains ()
     if (DomainIx == INDEX_NONE)
     {
       Stats = EmptyStats;
-      Stats.RankPoints = Rand(7) + 1;
-      Stats.Experience = 100;
+      Stats.RankPoints = 0;
+      Stats.Experience = 0;
       Stats.DomainName = DomainTemplate.DataName;
       AllDomainStats.AddItem(Stats);
     }

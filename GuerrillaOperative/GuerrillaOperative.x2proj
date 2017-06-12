@@ -34,6 +34,9 @@
     <Content Include="Src\GuerrillaOperative\Classes\GO_InsertBaseWeaponAbilities.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_TacticalActivityTracker.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_UIArmory_AbilityDomainRow.uc">
       <SubType>Content</SubType>
     </Content>

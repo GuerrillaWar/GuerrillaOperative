@@ -8,6 +8,16 @@ static event OnPostTemplatesCreated()
 
 }
 
+static event OnPreMission(XComGameState StartState, XComGameState_MissionSite MissionState)
+{
+  class'GO_TacticalActivityTracker'.static.OnPreMission(StartState, MissionState);
+}
+
+static event OnPostMission()
+{
+  class'GO_TacticalActivityTracker'.static.OnPostMission();
+}
+
 static function UpdateTemplatesForGWT()
 {
 	class'GO_InsertBaseWeaponAbilities'.static.AddBaseAbilitiesToWeapons();
