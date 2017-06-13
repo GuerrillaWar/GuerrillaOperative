@@ -34,7 +34,6 @@ static function OnPreMission(XComGameState StartState, XComGameState_MissionSite
   Tracker.InitData();
   StartState.AddStateObject(Tracker);
 
-
   ListenerObj = Tracker;
 	if (ListenerObj == none)
 	{
@@ -57,8 +56,8 @@ static function OnPostMission()
   Tracker = GO_TacticalActivityTracker(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'GO_TacticalActivityTracker', true));
 
   if (Tracker != none) {
-    Tracker.ProcessDomainExperience();
 		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("IniitUnitDomainExperience");
+    Tracker.ProcessDomainExperience(NewGameState);
     NewGameState.RemoveStateObject(Tracker.ObjectID);
     `XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 
@@ -74,6 +73,118 @@ function InitData ()
 {
   `log("GO_TacticalActivityTracker:: InitData");
 }
+
+
+function ProcessDomainExperience (XComGameState NewGameState)
+{
+  local XComGameState_Unit Unit;
+  local GO_GameState_UnitDomainExperience UnitExperience;
+  local GO_TacticalActivityRecord ActivityRecord;
+  local GO_TacticalActivityEquipment EquipmentRecord;
+  local X2StrategyElementTemplateManager Manager;
+  local array<X2StrategyElementTemplate> Templates;
+  local X2StrategyElementTemplate Template;
+  local GO_AbilityDomainTemplate DomainTemplate;
+  local XComGameStateHistory History;
+  local GO_UnitDomainStats DomainStats;
+  local GO_DomainItemExperienceData ExperienceData;
+  local int DomainIx, XPGained, EarnedRanks, StartingRanks;
+
+  local XComGameState_Item InventoryItem;
+  local array<XComGameState_Item> CurrentInventory;
+  local name WeaponCat, ItemCat;
+
+  `log("GO_TacticalActivityTracker:: ProcessDomainExperience");
+  LogState();
+  `log("GO_TacticalActivityTracker:: Processing...");
+
+  History = `XCOMHISTORY;
+  Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+  Templates = Manager.GetAllTemplatesOfClass(class'GO_AbilityDomainTemplate');
+
+
+  foreach ActivityRecords(ActivityRecord)
+  {
+    Unit = XComGameState_Unit(
+      History.GetGameStateForObjectID(ActivityRecord.UnitRef.ObjectID)
+    );
+    `log("Unit #" $ Unit.ObjectID);
+
+    UnitExperience = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit, NewGameState);
+
+    foreach Templates(Template)
+    {
+      DomainTemplate = GO_AbilityDomainTemplate(Template);
+      DomainIx = UnitExperience.AllDomainStats.Find('DomainName', DomainTemplate.DataName);
+      XPGained = 0;
+
+      CurrentInventory = Unit.GetAllInventoryItems(NewGameState);
+      foreach CurrentInventory(InventoryItem)
+      {
+        ItemCat = InventoryItem.GetMyTemplate().ItemCat;
+        WeaponCat = InventoryItem.GetWeaponCategory();
+
+        foreach DomainTemplate.ItemExperienceData(ExperienceData)
+        {
+          if (ExperienceData.ItemCat == ItemCat && ExperienceData.WeaponCat == WeaponCat)
+          {
+            XPGained += ExperienceData.XpForTakingOnMission;
+          }
+        }
+      }
+
+      foreach ActivityRecord.EquipmentRecords(EquipmentRecord)
+      {
+        foreach DomainTemplate.ItemExperienceData(ExperienceData)
+        {
+          if (ExperienceData.ItemCat == ItemCat && ExperienceData.WeaponCat == WeaponCat)
+          {
+            XPGained += (EquipmentRecord.Hits * ExperienceData.XpForHits);
+            XPGained += ((EquipmentRecord.Shots - EquipmentRecord.Hits) * ExperienceData.XpForMisses);
+            XPGained += (EquipmentRecord.Kills * ExperienceData.XpForKills);
+          }
+        }
+      }
+
+      `log("-" @ DomainTemplate.DataName $ ":" @ XPGained $ "+");
+      UnitExperience.AllDomainStats[DomainIx].Experience += XPGained;
+      `log("  Experience up to" @ UnitExperience.AllDomainStats[DomainIx].Experience);
+      
+      StartingRanks = (
+        UnitExperience.AllDomainStats[DomainIx].EarnedAbilities.Length + 
+        UnitExperience.AllDomainStats[DomainIx].RankPoints
+      );
+      EarnedRanks = 0;
+
+      while (
+        (StartingRanks + EarnedRanks < 7) &&
+        (UnitExperience.AllDomainStats[DomainIx].Experience >= DomainTemplate.DomainRanks[StartingRanks + EarnedRanks].ExperienceRequired)
+      )
+      {
+        UnitExperience.AllDomainStats[DomainIx].Experience -= DomainTemplate.DomainRanks[StartingRanks + EarnedRanks].ExperienceRequired;
+        EarnedRanks += 1;
+      }
+
+      `log("  Ranks Earned:" $ EarnedRanks);
+      UnitExperience.AllDomainStats[DomainIx].RankPoints += EarnedRanks;
+      `log(
+        "  Final Experience at " @
+        UnitExperience.AllDomainStats[DomainIx].Experience @
+        "with" @ UnitExperience.AllDomainStats[DomainIx].RankPoints @
+        "ranks"
+      );
+    }
+  }
+}
+
+
+
+// RECORDING
+
+
+
+
+
 
 function RecordKill (XComGameState_Unit Killer) {
   local GO_TacticalActivityRecord ActivityRecord, NewActivityRecord;
@@ -243,11 +354,6 @@ function RecordWeaponKill (XComGameState_Unit Killer, name ItemCat, name WeaponC
     NewActivityRecord.EquipmentRecords.AddItem(NewEquipmentRecord);
     ActivityRecords.AddItem(NewActivityRecord);
   }
-}
-
-function ProcessDomainExperience ()
-{
-  `log("GO_TacticalActivityTracker:: ProcessDomainExperience");
 }
 
 function LogState ()

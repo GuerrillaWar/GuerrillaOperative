@@ -22,7 +22,19 @@ static function GO_GameState_UnitDomainExperience GetOrCreateUnitDomainExperienc
 
   if (DomainExperienceState != none)
   {
-    return DomainExperienceState;
+    if (NewGameState == none)
+    {
+      return DomainExperienceState;
+    }
+    else
+    {
+      DomainExperienceState = GO_GameState_UnitDomainExperience(
+        NewGameState.CreateStateObject(class'GO_GameState_UnitDomainExperience', DomainExperienceState.ObjectID)
+      );
+      DomainExperienceState.InitDomains();
+      NewGameState.AddStateObject(DomainExperienceState);
+      return DomainExperienceState;
+    }
   }
 
 	History = `XCOMHISTORY;

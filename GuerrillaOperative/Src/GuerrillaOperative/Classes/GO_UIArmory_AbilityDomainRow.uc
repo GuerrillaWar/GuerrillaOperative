@@ -127,10 +127,12 @@ simulated function ApplyUnitStats(
   local name AbilityName;
   local GO_AbilityData AbilityData;
   local UIIcon AbilityIcon;
+  local int TextPaddingLeft, PaddingRight, FullExpWidth, ExpRequired, ExpWidth;
 
   CachedDomainStats = DomainStats;
   Earned = DomainStats.EarnedAbilities.Length;
   ToSpend = DomainStats.RankPoints;
+
 
   RankPointsText.SetText("" $ ToSpend);
 
@@ -157,6 +159,27 @@ simulated function ApplyUnitStats(
     CompetenceForPurchase = false;
     ExpertiseForPurchase = false;
     MasteryForPurchase = false;
+  }
+
+  TextPaddingLeft = 160;
+  PaddingRight = 20;
+  FullExpWidth = Width - TextPaddingLeft - PaddingRight;
+
+  `log(AbilityDomainTemplate.DataName $ ":" @ DomainStats.Experience $ "xp");
+
+  if (Earned + ToSpend < 7)
+  {
+    ExpRequired = AbilityDomainTemplate.DomainRanks[Earned + ToSpend].ExperienceRequired;
+    ExpWidth = Round((float(DomainStats.Experience) / float(ExpRequired)) * float(FullExpWidth));
+    `log(DomainStats.Experience @ "/" @ ExpRequired @ "*" @ FullExpWidth);
+    `log("XpWidth:" @ ExpWidth);
+    Experience.SetSize(ExpWidth, 2);
+    Experience.SetColor( class'UIUtilities_Colors'.const.NORMAL_HTML_COLOR);
+  }
+  else
+  {
+    Experience.SetSize(FullExpWidth, 2);
+    Experience.SetColor( class'UIUtilities_Colors'.const.PERK_HTML_COLOR);
   }
 
   foreach AbilityDomainTemplate.CompetenceAbilities(AbilityData, Ix) {
