@@ -3,3 +3,8 @@ DisplayName="XCOM Operative"
 ClassSummary="Highly trained XCOM Operators for high risk missions."
 LeftAbilityTreeTitle="Offensive"
 RightAbilityTreeTitle="Defensive"
+
+[GO_Sniper_Setup X2AbilityTemplate]
+LocFriendlyName="Set Up Rifle"
+LocHelpText="Set Up Rifle for long distance shooting. Enables Squadsight at the expense of defense, making the soldier easier to hit."
+LocLongDescription="Set Up Rifle for long distance shooting. Enables Squadsight at the expense of defense, making the soldier easier to hit."

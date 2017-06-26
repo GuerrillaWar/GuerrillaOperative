@@ -29,7 +29,7 @@ static function AddBaseAbilitiesToWeapons()
 
 
   AbilityList.Length = 0;
-  AbilityList.AddItem('Squadsight');
+  AbilityList.AddItem('GO_Sniper_Setup');
   AddAbilitiesToItem('SniperRifle_CV', AbilityList);
   AddAbilitiesToItem('SniperRifle_MG', AbilityList);
   AddAbilitiesToItem('SniperRifle_BM', AbilityList);

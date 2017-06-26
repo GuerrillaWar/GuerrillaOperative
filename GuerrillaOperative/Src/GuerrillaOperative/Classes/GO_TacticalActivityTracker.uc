@@ -33,6 +33,7 @@ static function OnPreMission(XComGameState StartState, XComGameState_MissionSite
   }
   Tracker.InitData();
   StartState.AddStateObject(Tracker);
+  `log("GO_TacticalActivityTracker:: InitListeners");
 
   ListenerObj = Tracker;
 	if (ListenerObj == none)
@@ -63,6 +64,7 @@ static function OnPostMission()
 
     ListenerObj = Tracker;
 
+    `log("GO_TacticalActivityTracker:: Cleaning Up");
     `XEVENTMGR.UnRegisterFromAllEvents(ListenerObj);
   }
 
