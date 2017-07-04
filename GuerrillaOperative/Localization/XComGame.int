@@ -13,3 +13,13 @@ LocLongDescription="Set Up Rifle for long distance shooting. Enables Squadsight 
 LocFriendlyName="Zero Sights"
 LocHelpText="Zero Sights for more accurate shooting at the set range. Aim boost decays and becomes negative at ranges 5 tiles above and below the chosen range."
 LocLongDescription="Zero Sights for more accurate shooting at the set range. Aim boost decays and becomes negative at ranges 5 tiles above and below the chosen range."
+
+[GO_Sniper_ReconByScope X2AbilityTemplate]
+LocFriendlyName="Recon By Scope"
+LocHelpText="While Set Up, use the Sniper Scope to expand your viewing range for in a particular area for a turn."
+LocLongDescription="While Set Up, use the Sniper Scope to expand your viewing range for in a particular area for a turn."
+
+[GO_Sniper_Displacement X2AbilityTemplate]
+LocFriendlyName="Displacement"
+LocHelpText="Automatically Set Up on any turn where a full gold movement occurred."
+LocLongDescription="Automatically Set Up on any turn where a full gold movement occurred."

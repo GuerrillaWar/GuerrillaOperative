@@ -118,3 +118,69 @@ function LearnDomainAbility(
   `XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
   PopulateData();
 }
+
+
+function PreviewDomainAbility(
+  name DomainName, eGO_AbilityLevel AbilityLevel, int AbilityIx
+)
+{
+	local XComGameState_Unit Unit;
+	local XComGameStateHistory History;
+  local XComGameState NewGameState;
+  local X2StrategyElementTemplateManager Manager;
+  local X2AbilityTemplateManager AbilityManager;
+	local string TmpStr;
+
+  local GO_AbilityDomainTemplate DomainTemplate;
+  local X2AbilityTemplate AbilityTemplate;
+  local GO_AbilityData AbilityData;
+	local GO_GameState_UnitDomainExperience UnitDomainState;
+
+	History = `XCOMHISTORY;
+	Unit = GetUnit();
+  UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
+  Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+  DomainTemplate = GO_AbilityDomainTemplate(Manager.FindStrategyElementTemplate(DomainName));
+  AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+
+	MC.BeginFunctionOp("setAbilityPreview");
+
+  switch (AbilityLevel) {
+    case eGO_AbilityLevel_Competence:
+      AbilityData = DomainTemplate.CompetenceAbilities[AbilityIx]; break;
+    case eGO_AbilityLevel_Expertise:
+      AbilityData = DomainTemplate.ExpertiseAbilities[AbilityIx]; break;
+    case eGO_AbilityLevel_Mastery:
+      AbilityData = DomainTemplate.MasteryAbilities[AbilityIx]; break;
+  }
+  `log("Preview Domain Ability Hopefully here:" @ AbilityData.AbilityName);
+
+  AbilityTemplate = AbilityManager.FindAbilityTemplate(AbilityData.AbilityName);
+
+  if(AbilityTemplate != none)
+  {
+    MC.QueueString(AbilityTemplate.IconImage); // icon
+
+    TmpStr = AbilityTemplate.LocFriendlyName != "" ? AbilityTemplate.LocFriendlyName : ("Missing 'LocFriendlyName' for " $ AbilityTemplate.DataName);
+    MC.QueueString(Caps(TmpStr)); // name
+
+    TmpStr = AbilityTemplate.HasLongDescription() ? AbilityTemplate.GetMyLongDescription(, Unit) : ("Missing 'LocLongDescription' for " $ AbilityTemplate.DataName);
+    MC.QueueString(TmpStr); // description
+    MC.QueueBoolean(false); // isClassIcon
+  }
+  else
+  {
+    MC.QueueString(""); // icon
+    MC.QueueString(""); // name
+    MC.QueueString(""); // description
+    MC.QueueBoolean(false); // isClassIcon
+  }
+
+  // blank left side for now
+  MC.QueueString(""); // icon
+  MC.QueueString(""); // name
+  MC.QueueString(""); // description
+  MC.QueueBoolean(false); // isClassIcon
+
+	MC.EndOp();
+}

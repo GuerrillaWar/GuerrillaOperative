@@ -5,7 +5,7 @@ static event OnPostTemplatesCreated()
 	`log("GuerrillaOperative :: Present and Correct");
 	UpdateTemplatesForGWT();
   CheckDomainTemplates();
-
+  ChainAbilityTag();
 }
 
 static event OnPreMission(XComGameState StartState, XComGameState_MissionSite MissionState)

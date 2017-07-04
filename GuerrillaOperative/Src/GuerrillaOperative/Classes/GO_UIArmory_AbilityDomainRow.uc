@@ -292,6 +292,29 @@ simulated function OnAbilityIconEvent(UIPanel Panel, int Cmd)
       }
     }
   }
+
+  `log("Mouse With Domain Ability");
+	if(Cmd == class'UIUtilities_Input'.const.FXS_L_MOUSE_IN || Cmd == class'UIUtilities_Input'.const.FXS_L_MOUSE_DRAG_OVER)
+  {
+    `log("Previewing Domain Ability");
+    AbilityIx = CompetenceIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE)
+    {
+      ScreenUI.PreviewDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Competence, AbilityIx);
+    }
+
+    AbilityIx = ExpertiseIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE)
+    {
+      ScreenUI.PreviewDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Expertise, AbilityIx);
+    }
+
+    AbilityIx = MasteryIcons.Find(AbilityIcon);
+    if (AbilityIx != INDEX_NONE)
+    {
+      ScreenUI.PreviewDomainAbility(AbilityDomainTemplate.DataName, eGO_AbilityLevel_Mastery, AbilityIx);
+    }
+  }
 }
 
 defaultproperties
