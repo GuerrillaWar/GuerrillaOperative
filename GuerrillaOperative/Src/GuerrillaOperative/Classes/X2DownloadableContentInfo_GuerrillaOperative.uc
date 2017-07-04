@@ -129,3 +129,23 @@ static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out a
     }
   }
 }
+
+
+static function ChainAbilityTag()
+{
+  local XComEngine Engine;
+  local GuerrillaOperative_X2AbilityTag AbilityTag;
+  local X2AbilityTag OldAbilityTag;
+  local int idx;
+
+  Engine = `XENGINE;
+
+  OldAbilityTag = Engine.AbilityTag;
+
+  AbilityTag = new class'GuerrillaOperative_X2AbilityTag';
+  AbilityTag.WrappedTag = OldAbilityTag;
+
+  idx = Engine.LocalizeContext.LocalizeTags.Find(Engine.AbilityTag);
+  Engine.AbilityTag = AbilityTag;
+  Engine.LocalizeContext.LocalizeTags[idx] = AbilityTag;
+}

@@ -21,6 +21,12 @@
     <Content Include="Config\XComGame.ini">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Config\XComGO_Abilities.ini">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Content\XPerkIconPack.upk">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Localization\GuerrillaOperative.int">
       <SubType>Content</SubType>
     </Content>
@@ -53,6 +59,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_SniperSetup.uc">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_ZeroSights.uc">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2StrategyElement_DefaultAbilityDomains.uc">

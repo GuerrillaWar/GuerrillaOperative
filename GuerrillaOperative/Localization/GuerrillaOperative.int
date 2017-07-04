@@ -22,3 +22,15 @@ DisplayName="Rifle"
 
 [AbilityDomain_AutomaticWeapon GO_AbilityDomainTemplate]
 DisplayName="Automatic"
+
+
+[GO_X2Ability_SniperAbilities]
+SetupAbilityFlyover="Set Up Rifle"
+ZeroSightsFlyover="Zeroed Sights"
+ZeroSightsEffectName="Zeroed Sights"
+ZeroSightsEffectDesc="Rifle sights have been zeroed to <Ability:ZeroSightsRange>. Shots at this range will have boosted accuracy, while shots more than 5 tiles different to this range will receive a penalty."
+
+[GO_X2Effect_ZeroSights]
+ZeroSightsReason="Zeroed Sights"
+
+
