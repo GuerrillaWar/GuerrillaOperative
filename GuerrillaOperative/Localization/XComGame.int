@@ -23,3 +23,8 @@ LocLongDescription="While Set Up, use the Sniper Scope to expand your viewing ra
 LocFriendlyName="Displacement"
 LocHelpText="Automatically Set Up on any turn where a full gold movement occurred."
 LocLongDescription="Automatically Set Up on any turn where a full gold movement occurred."
+
+[GO_Sniper_VitalPointTargeting X2AbilityTemplate]
+LocFriendlyName="Vital Point Targeting"
+LocHelpText="Take an aimed shot on a vital point, with lower chance to hit, but more chance to do critical damage."
+LocLongDescription="Take an aimed shot on a vital point, with lower chance to hit, but more chance to do critical damage."

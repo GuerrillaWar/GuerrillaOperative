@@ -10,6 +10,9 @@ var config float RECON_BY_SCOPE_RADIUS;
 
 var config int SETUP_DEFENSE_MODIFIER;
 
+var config int VITAL_POINT_AIM_MODIFIER;
+var config int VITAL_POINT_CRIT_MODIFIER;
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
@@ -19,6 +22,7 @@ static function array<X2DataTemplate> CreateTemplates()
   // COMPETENCY
 	Templates.AddItem(CreateZeroSightsAbility());
 	Templates.AddItem(CreateReconByScopeAbility());
+	Templates.AddItem(CreateVitalPointTargetingAbility());
 
   // EXPERTISE
 	Templates.AddItem(CreateDisplacementAbility());
@@ -36,7 +40,7 @@ static function X2AbilityTemplate CreateSetupAbility()
   local X2Condition_UnitEffects ExcludeEffects;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_Setup');
-	Template.IconImage = "img:///XPerkIconPack.UIPerk_rifle_sniper";
+	Template.IconImage = "img:///XPerkIconPack.UIPerk_rifle_shot";
   Template.ShotHUDPriority = 100;
 
 	Template.AbilitySourceName = 'eAbilitySource_Perk';
@@ -207,6 +211,77 @@ static function X2AbilityTemplate CreateReconByScopeAbility()
 	return Template;
 }
 
+
+static function X2AbilityTemplate CreateVitalPointTargetingAbility()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityCooldown                 Cooldown;
+	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+  local X2Effect_Knockback				KnockbackEffect;
+	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2AbilityCost_Ammo                AmmoCost;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_VitalPointTargeting');
+
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_deadeye";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Offensive;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
+	Template.bUsesFiringCamera = true;
+	Template.CinescriptCameraType = "StandardGunFiring";
+
+	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.BuiltInHitMod = default.VITAL_POINT_AIM_MODIFIER;
+	ToHitCalc.BuiltInCritMod = default.VITAL_POINT_CRIT_MODIFIER;
+	Template.AbilityToHitCalc = ToHitCalc;
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+
+	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+  Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+  KnockbackEffect = new class'X2Effect_Knockback';
+  KnockbackEffect.KnockbackDistance = 2;
+  KnockbackEffect.bUseTargetLocation = true;
+  Template.AddTargetEffect(KnockbackEffect);
+
+	Template.bAllowFreeFireWeaponUpgrade = true;
+	Template.bAllowAmmoEffects = true;
+	Template.bAllowBonusWeaponEffects = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bCrossClassEligible = true;
+
+	return Template;
+}
 
 
 static function X2AbilityTemplate CreateDisplacementAbility()
