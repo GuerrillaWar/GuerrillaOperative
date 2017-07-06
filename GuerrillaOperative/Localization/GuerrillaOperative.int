@@ -33,4 +33,5 @@ ZeroSightsEffectDesc="Rifle sights have been zeroed to <Ability:ZeroSightsRange>
 [GO_X2Effect_ZeroSights]
 ZeroSightsReason="Zeroed Sights"
 
-
+[GO_X2Effect_InTheOpen]
+InTheOpenReason="In The Open"

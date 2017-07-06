@@ -27,6 +27,9 @@ static function array<X2DataTemplate> CreateTemplates()
   // EXPERTISE
 	Templates.AddItem(CreateDisplacementAbility());
 	Templates.AddItem(CreateDisplacementTriggerAbility());
+	Templates.AddItem(CreateInTheOpenAbility());
+
+  // MASTERY
 
 	return Templates;
 }
@@ -281,6 +284,35 @@ static function X2AbilityTemplate CreateVitalPointTargetingAbility()
 	Template.bCrossClassEligible = true;
 
 	return Template;
+}
+
+
+static function X2AbilityTemplate CreateInTheOpenAbility()
+{
+	local X2AbilityTemplate                 Template;	
+	local GO_X2Effect_InTheOpen		InTheOpenEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_InTheOpen');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_inthezone";
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bDisplayInUITacticalText = false;
+	Template.bIsPassive = true;
+	
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SelfTarget;
+	Template.AbilityTriggers.AddItem(default.UnitPostBeginPlayTrigger);
+	
+	InTheOpenEffect = new class'GO_X2Effect_InTheOpen';
+	InTheOpenEffect.BuildPersistentEffect(1, true, false, false);
+	InTheOpenEffect.SetDisplayInfo(ePerkBuff_Passive, Template.LocFriendlyName, Template.LocLongDescription, Template.IconImage, true,, Template.AbilitySourceName);
+	Template.AddTargetEffect(InTheOpenEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+
+	return Template;	
 }
 
 
