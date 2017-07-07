@@ -28,3 +28,13 @@ LocLongDescription="Automatically Set Up on any turn where a full gold movement 
 LocFriendlyName="Vital Point Targeting"
 LocHelpText="Take an aimed shot on a vital point, with lower chance to hit, but more chance to do critical damage."
 LocLongDescription="Take an aimed shot on a vital point, with lower chance to hit, but more chance to do critical damage."
+
+[GO_Sniper_InTheOpen X2AbilityTemplate]
+LocFriendlyName="In The Open"
+LocHelpText="Gain an aim boost against any flanked targets."
+LocLongDescription="Gain an aim boost against any flanked targets."
+
+[GO_Sniper_Lockdown X2AbilityTemplate]
+LocFriendlyName="Lockdown"
+LocHelpText="Take aim at a target, responding to any movement or attack with an aim and crit boosted shot."
+LocLongDescription="Take aim at a target, responding to any movement or attack with an aim and crit boosted shot."

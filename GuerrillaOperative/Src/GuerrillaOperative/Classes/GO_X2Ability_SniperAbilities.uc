@@ -13,6 +13,9 @@ var config int SETUP_DEFENSE_MODIFIER;
 var config int VITAL_POINT_AIM_MODIFIER;
 var config int VITAL_POINT_CRIT_MODIFIER;
 
+var config int LOCKDOWN_AIM_MODIFIER;
+var config int LOCKDOWN_CRIT_MODIFIER;
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
@@ -30,6 +33,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CreateInTheOpenAbility());
 
   // MASTERY
+	Templates.AddItem(CreateLockdownAbility());
+	Templates.AddItem(CreateLockdownShotAbility());
 
 	return Templates;
 }
@@ -400,6 +405,176 @@ function EventListenerReturn DisplacementTurnEndListener(Object EventData, Objec
   }
 
 	return ELR_NoInterrupt;
+}
+
+
+static function X2AbilityTemplate CreateLockdownAbility()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+  local X2Effect_Persistent               LockdownEffect;
+	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2AbilityCost_Ammo                AmmoCost;
+	local X2Effect_ReserveActionPoints  ReservePointsEffect;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_Lockdown');
+
+	Template.IconImage = "img:///XPerkIconPack.UIPerk_move_blossom";
+  Template.AdditionalAbilities.AddItem('GO_Sniper_LockdownShot');
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.Hostility = eHostility_Offensive;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY;
+	Template.AbilityConfirmSound = "TacticalUI_ActivateAbility";
+
+	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
+	Template.bUsesFiringCamera = true;
+	Template.CinescriptCameraType = "StandardGunFiring";
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	AmmoCost.bFreeCost = true;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ActionPointCost = new class'X2AbilityCost_ActionPoints';
+	ActionPointCost.iNumPoints = 2;
+	ActionPointCost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(ActionPointCost);
+
+	ReservePointsEffect = new class'X2Effect_ReserveActionPoints';
+	ReservePointsEffect.ReserveType = 'GO_Lockdown';
+	Template.AddShooterEffect(ReservePointsEffect);
+
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = default.SimpleSingleTarget;
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileTargetProperty);
+
+	LockdownEffect = new class'X2Effect_Persistent';
+	LockdownEffect.EffectName = 'GO_LockdownTarget';
+	LockdownEffect.BuildPersistentEffect(2, false, false, false, eGameRule_PlayerTurnBegin);
+	LockdownEffect.SetSourceDisplayInfo(ePerkBuff_Bonus, Template.LocFriendlyName, Template.GetMyLongDescription(), Template.IconImage, true, Template.AbilitySourceName);
+	LockdownEffect.SetupEffectOnShotContextResult(true, true);
+	Template.AddTargetEffect(LockdownEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+  Template.bShowActivation = true;
+  Template.bSkipFireAction = true;
+
+	Template.bCrossClassEligible = true;
+
+	return Template;
+}
+
+
+
+static function X2AbilityTemplate CreateLockdownShotAbility()
+{
+	local X2AbilityTemplate                 Template;
+	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
+  local X2Effect_Knockback				KnockbackEffect;
+	local X2Condition_Visibility            TargetVisibilityCondition;
+	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
+  local X2AbilityTrigger_Event            Trigger;
+  local X2Condition_AbilityProperty       AbilityCondition;
+  local X2Condition_UnitEffectsWithAbilitySource LockdownCondition;
+  local X2Effect_RemoveEffects            LockdownRemoval;
+  local X2AbilityTarget_Single            SingleTarget;
+	local X2AbilityCost_Ammo                AmmoCost;
+	local X2AbilityCost_ActionPoints        ActionPointCost;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_LockdownShot');
+
+	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
+	ToHitCalc.BuiltInHitMod = default.LOCKDOWN_AIM_MODIFIER;
+	ToHitCalc.BuiltInCritMod = default.LOCKDOWN_CRIT_MODIFIER;
+  ToHitCalc.bReactionFire = true;
+	Template.AbilityToHitCalc = ToHitCalc;
+
+	AmmoCost = new class'X2AbilityCost_Ammo';
+	AmmoCost.iAmmo = 1;
+	Template.AbilityCosts.AddItem(AmmoCost);
+
+	ReserveActionPointCost = new class'X2AbilityCost_ReserveActionPoints';
+	ReserveActionPointCost.iNumPoints = 1;
+	ReserveActionPointCost.bFreeCost = true;
+	ReserveActionPointCost.AllowedTypes.AddItem('GO_Lockdown');
+	Template.AbilityCosts.AddItem(ReserveActionPointCost);
+
+	SingleTarget = new class'X2AbilityTarget_Single';
+	SingleTarget.OnlyIncludeTargetsInsideWeaponRange = true;
+	Template.AbilityTargetStyle = SingleTarget;
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+
+	Template.AbilityTargetConditions.AddItem(default.LivingHostileUnitDisallowMindControlProperty);
+	TargetVisibilityCondition = new class'X2Condition_Visibility';
+	TargetVisibilityCondition.bRequireGameplayVisible = true;
+	TargetVisibilityCondition.bDisablePeeksOnMovement = true;
+	TargetVisibilityCondition.bAllowSquadsight = true;
+	Template.AbilityTargetConditions.AddItem(TargetVisibilityCondition);
+
+	LockdownCondition = new class'X2Condition_UnitEffectsWithAbilitySource';
+	LockdownCondition.AddRequireEffect('GO_LockdownTarget', 'AA_UnitIsTargeted');
+	Template.AbilityTargetConditions.AddItem(LockdownCondition);
+
+	AbilityCondition = new class'X2Condition_AbilityProperty';
+	AbilityCondition.TargetMustBeInValidTiles = true;
+	Template.AbilityTargetConditions.AddItem(AbilityCondition);
+
+	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
+	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
+  Template.AddTargetEffect(default.WeaponUpgradeMissDamage);
+
+  LockdownRemoval = new class'X2Effect_RemoveEffects';
+  LockdownRemoval.EffectNamesToRemove.AddItem('GO_LockdownTarget');
+  LockdownRemoval.bCheckSource = true;
+  Template.AddTargetEffect(LockdownRemoval);
+
+  KnockbackEffect = new class'X2Effect_Knockback';
+  KnockbackEffect.KnockbackDistance = 2;
+  KnockbackEffect.bUseTargetLocation = true;
+  Template.AddTargetEffect(KnockbackEffect);
+
+	Trigger = new class'X2AbilityTrigger_Event';
+	Trigger.EventObserverClass = class'X2TacticalGameRuleset_MovementObserver';
+	Trigger.MethodName = 'InterruptGameState';
+	Template.AbilityTriggers.AddItem(Trigger);
+	Trigger = new class'X2AbilityTrigger_Event';
+	Trigger.EventObserverClass = class'X2TacticalGameRuleset_AttackObserver';
+	Trigger.MethodName = 'InterruptGameState';
+	Template.AbilityTriggers.AddItem(Trigger);
+
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = EAbilityIconBehavior_NeverShow;
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_overwatch";
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_MAJOR_PRIORITY;
+	Template.bDisplayInUITooltip = false;
+	Template.bDisplayInUITacticalText = false;
+
+	Template.bAllowFreeFireWeaponUpgrade = true;
+	Template.bAllowAmmoEffects = true;
+	Template.bAllowBonusWeaponEffects = true;
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
+
+	Template.bCrossClassEligible = true;
+
+	return Template;
 }
 
 

@@ -71,9 +71,10 @@ static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out a
   local GO_AbilityData AbilityData;
   local GO_EarnedAbility EarnedAbility;
 	local X2AbilityTemplateManager AbilityTemplateManager;
-  local X2AbilityTemplate AbilityTemplate;
+  local X2AbilityTemplate AbilityTemplate, SubAbilityTemplate;
   local XComGameState_Item InventoryItem;
   local X2WeaponTemplate WeaponTemplate;
+  local name SubAbilityName;
   local array<XComGameState_Item> CurrentInventory;
 	local GO_GameState_UnitDomainExperience UnitDomainState;
 
@@ -116,6 +117,17 @@ static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out a
               Setup.Template = AbilityTemplate;
               Setup.SourceWeaponRef = InventoryItem.GetReference();
               SetupData.AddItem(Setup);
+
+              foreach AbilityTemplate.AdditionalAbilities(SubAbilityName)
+              {
+                SubAbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(SubAbilityName);
+                Setup = BlankSetupData;
+                `log("Adding Ability:" @ SubAbilityName);
+                Setup.TemplateName = SubAbilityName;
+                Setup.Template = SubAbilityTemplate;
+                Setup.SourceWeaponRef = InventoryItem.GetReference();
+                SetupData.AddItem(Setup);
+              }
             }
           }
         }
@@ -125,6 +137,16 @@ static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out a
         Setup.TemplateName = AbilityData.AbilityName;
         Setup.Template = AbilityTemplate;
         SetupData.AddItem(Setup);
+
+        foreach AbilityTemplate.AdditionalAbilities(SubAbilityName)
+        {
+          SubAbilityTemplate = AbilityTemplateManager.FindAbilityTemplate(SubAbilityName);
+          Setup = BlankSetupData;
+          `log("Adding Ability:" @ SubAbilityName);
+          Setup.TemplateName = SubAbilityName;
+          Setup.Template = SubAbilityTemplate;
+          SetupData.AddItem(Setup);
+        }
       }
     }
   }
