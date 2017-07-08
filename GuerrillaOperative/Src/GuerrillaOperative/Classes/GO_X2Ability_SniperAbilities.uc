@@ -340,7 +340,7 @@ static function X2AbilityTemplate CreateDisplacementTriggerAbility()
 	local X2AbilityTemplate						Template;
 	local X2AbilityTrigger_EventListener		Trigger;
 
-	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_Setup');
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_DisplacementTrigger');
 
 	Template.AbilityToHitCalc = default.DeadEye;
 	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
@@ -499,7 +499,7 @@ static function X2AbilityTemplate CreateLockdownShotAbility()
 	ToHitCalc = new class'X2AbilityToHitCalc_StandardAim';
 	ToHitCalc.BuiltInHitMod = default.LOCKDOWN_AIM_MODIFIER;
 	ToHitCalc.BuiltInCritMod = default.LOCKDOWN_CRIT_MODIFIER;
-  ToHitCalc.bReactionFire = true;
+  ToHitCalc.bReactionFire = false; // no reaction penalty, sniper is prepared
 	Template.AbilityToHitCalc = ToHitCalc;
 
 	AmmoCost = new class'X2AbilityCost_Ammo';
@@ -530,10 +530,6 @@ static function X2AbilityTemplate CreateLockdownShotAbility()
 	LockdownCondition.AddRequireEffect('GO_LockdownTarget', 'AA_UnitIsTargeted');
 	Template.AbilityTargetConditions.AddItem(LockdownCondition);
 
-	AbilityCondition = new class'X2Condition_AbilityProperty';
-	AbilityCondition.TargetMustBeInValidTiles = true;
-	Template.AbilityTargetConditions.AddItem(AbilityCondition);
-
 	//  Put holo target effect first because if the target dies from this shot, it will be too late to notify the effect.
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.HoloTargetEffect());
 	Template.AddTargetEffect(class'X2Ability_GrenadierAbilitySet'.static.ShredderDamageEffect());
@@ -541,7 +537,6 @@ static function X2AbilityTemplate CreateLockdownShotAbility()
 
   LockdownRemoval = new class'X2Effect_RemoveEffects';
   LockdownRemoval.EffectNamesToRemove.AddItem('GO_LockdownTarget');
-  LockdownRemoval.bCheckSource = true;
   Template.AddTargetEffect(LockdownRemoval);
 
   KnockbackEffect = new class'X2Effect_Knockback';
