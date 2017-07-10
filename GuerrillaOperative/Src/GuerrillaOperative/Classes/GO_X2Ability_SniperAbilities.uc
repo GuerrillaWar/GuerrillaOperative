@@ -361,7 +361,7 @@ static function X2AbilityTemplate CreateDisplacementTriggerAbility()
 	return Template;
 }
 
-function EventListenerReturn DisplacementTurnEndListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
+static function EventListenerReturn DisplacementTurnEndListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
 	local XComGameState_Unit UnitState;
 	local UnitValue AttacksThisTurn, NonMoveActionsThisTurn;
