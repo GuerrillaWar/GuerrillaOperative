@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # XCOM ModBuddy Solution File, Format Version 11.00
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{5DAE07AF-E217-45C1-8DE7-FF99D6011E8A}") = "GuerrillaOperative", "GuerrillaOperative\GuerrillaOperative.x2proj", "{3E74AC38-6AF0-4182-BC1E-3E04E31A1C1D}"
+Project("{5DAE07AF-E217-45C1-8DE7-FF99D6011E8A}") = "GuerrillaOperative", "GuerrillaOperative\GuerrillaOperative.x2proj", "{631F6B9B-7A24-47EA-945A-528F14D10C9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|XCOM 2 = Default|XCOM 2
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E74AC38-6AF0-4182-BC1E-3E04E31A1C1D}.Default|XCOM 2.ActiveCfg = Default|XCOM 2
-		{3E74AC38-6AF0-4182-BC1E-3E04E31A1C1D}.Default|XCOM 2.Build.0 = Default|XCOM 2
+		{631F6B9B-7A24-47EA-945A-528F14D10C9F}.Default|XCOM 2.ActiveCfg = Default|XCOM 2
+		{631F6B9B-7A24-47EA-945A-528F14D10C9F}.Default|XCOM 2.Build.0 = Default|XCOM 2
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

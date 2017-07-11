@@ -20,6 +20,7 @@ static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
 
+  // WEAPON
 	Templates.AddItem(CreateSetupAbility());
 
   // COMPETENCY

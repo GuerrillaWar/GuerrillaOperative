@@ -38,3 +38,11 @@ LocLongDescription="Gain an aim boost against any flanked targets."
 LocFriendlyName="Lockdown"
 LocHelpText="Take aim at a target, responding to any movement or attack with an aim and crit boosted shot."
 LocLongDescription="Take aim at a target, responding to any movement or attack with an aim and crit boosted shot."
+
+
+
+
+[GO_Rifle_FireAndMove X2AbilityTemplate]
+LocFriendlyName="Fire And Move"
+LocHelpText="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded, once per turn."
+LocLongDescription="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded."
