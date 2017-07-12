@@ -35,3 +35,6 @@ ZeroSightsReason="Zeroed Sights"
 
 [GO_X2Effect_InTheOpen]
 InTheOpenReason="In The Open"
+
+[GO_X2Effect_ConcentratedFire]
+ConcentratedFireReason="Concentrated Fire"

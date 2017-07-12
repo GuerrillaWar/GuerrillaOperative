@@ -58,6 +58,9 @@
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Ability_SniperAbilities.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_ConcentratedFire.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Effect_FireAndMove.uc">
       <SubType>Content</SubType>
     </Content>
