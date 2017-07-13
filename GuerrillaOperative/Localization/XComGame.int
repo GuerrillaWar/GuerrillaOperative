@@ -41,12 +41,31 @@ LocLongDescription="Take aim at a target, responding to any movement or attack w
 
 
 
+[GO_Rifle_DefensivePosture X2AbilityTemplate]
+LocFriendlyName="Defensive Posture"
+LocHelpText="Ends turn. All incoming attacks will be responded to with a snap shot, ammo permitting, with slightly reduced aim."
+LocLongDescription="Ends turn. All incoming attacks will be responded to with a snap shot, ammo permitting, with slightly reduced aim."
+
+[GO_Rifle_EverVigilant X2AbilityTemplate]
+LocFriendlyName="Ever Vigilant"
+LocLongDescription="If you spend all of your actions on moves, you are granted an automatic overwatch shot at the end of the turn."
+LocHelpText="Automatically activate Overwatch if you did nothing but move this turn."
+LocFlyOverText="Overwatch: Ever Vigilant"
+LocPromotionPopupText="<Bullet/> Ever Vigilant enables an extremely mobile style of play for the Specialist.<br/><Bullet/> Any action other than moving will invalidate Ever Vigilant.<br/>"
+
 [GO_Rifle_ConcentratedFire X2AbilityTemplate]
 LocFriendlyName="Concentrated Fire"
 LocHelpText="When taking consecutive snap shots taken on a single turn, the second shot will gain an aim boost."
 LocLongDescription="When taking consecutive snap shots taken on a single turn, the second shot will gain an aim boost."
 
+[GO_Rifle_Sentinel X2AbilityTemplate]
+LocFriendlyName="Guardian"
+LocLongDescription="With every successful Overwatch shot, there is a <Ability:GUARDIAN_PROC/>% chance that another shot will be taken."
+LocHelpText="With every successful Overwatch shot, there is a <Ability:GUARDIAN_PROC/>% chance that another shot will be taken."
+LocFlyOverText="Guardian"
+LocPromotionPopupText="<Bullet/> There are no limits to how many Overwatch shots can be taken with the Guardian ability, outside of ammunition and viable targets.<br/>"
+
 [GO_Rifle_FireAndMove X2AbilityTemplate]
 LocFriendlyName="Fire And Move"
-LocHelpText="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded, once per turn."
-LocLongDescription="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded."
+LocHelpText="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded with a move only action point."
+LocLongDescription="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded with a move only action point."

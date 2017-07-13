@@ -38,3 +38,6 @@ InTheOpenReason="In The Open"
 
 [GO_X2Effect_ConcentratedFire]
 ConcentratedFireReason="Concentrated Fire"
+
+[GO_X2Effect_DefensivePosture]
+DefensivePostureReason="Defensive Posture"
