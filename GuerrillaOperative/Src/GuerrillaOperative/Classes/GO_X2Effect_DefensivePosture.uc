@@ -20,6 +20,7 @@ DefaultProperties
 {
 	EffectName = "GO_DefensivePosture"
 	DuplicateResponse = eDupe_Ignore
+	GrantActionPoint = "returnfire"
 	MaxPointsPerTurn = 10
 	bDirectAttackOnly = true
 	bPreEmptiveFire = false

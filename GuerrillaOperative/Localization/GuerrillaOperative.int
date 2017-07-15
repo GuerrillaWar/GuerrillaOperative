@@ -23,6 +23,8 @@ DisplayName="Rifle"
 [AbilityDomain_AutomaticWeapon GO_AbilityDomainTemplate]
 DisplayName="Automatic"
 
+[GO_X2Ability_CQBAbilities]
+HoldCorridorFlyover="Hold Corridor"
 
 [GO_X2Ability_SniperAbilities]
 SetupAbilityFlyover="Set Up Rifle"

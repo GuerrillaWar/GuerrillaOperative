@@ -115,6 +115,11 @@ static function X2AbilityTemplate CreateDefensivePostureAbility()
 
 	CoveringFireEffect = new class'GO_X2Effect_DefensivePosture';
 	CoveringFireEffect.AbilityToActivate = default.DefensivePostureShotAbility;
+  CoveringFireEffect.bDirectAttackOnly = true;
+  CoveringFireEffect.bPreEmptiveFire = false;
+  CoveringFireEffect.bOnlyDuringEnemyTurn = true;
+  CoveringFireEffect.MaxPointsPerTurn = 10;
+  CoveringFireEffect.GrantActionPoint = 'returnfire';
 	CoveringFireEffect.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(CoveringFireEffect);
 
@@ -134,6 +139,8 @@ static function X2AbilityTemplate CreateDefensivePostureAbility()
 	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
 	Template.BuildVisualizationFn = TypicalAbility_BuildVisualization;
 	Template.CinescriptCameraType = "Overwatch";
+	Template.bSkipFireAction = true;
+	Template.bShowActivation = true;
 
 	Template.Hostility = eHostility_Defensive;
 

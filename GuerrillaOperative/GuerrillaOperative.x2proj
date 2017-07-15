@@ -49,6 +49,9 @@
     <Content Include="Src\GuerrillaOperative\Classes\GO_UIArmory_AbilityDomains.uc">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Src\GuerrillaOperative\Classes\GO_X2Ability_CQBAbilities.uc">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Src\GuerrillaOperative\Classes\GO_X2Ability_LoadGrenades.uc">
       <SubType>Content</SubType>
     </Content>

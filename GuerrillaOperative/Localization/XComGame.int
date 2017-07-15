@@ -40,6 +40,11 @@ LocHelpText="Take aim at a target, responding to any movement or attack with an 
 LocLongDescription="Take aim at a target, responding to any movement or attack with an aim and crit boosted shot."
 
 
+[GO_CQB_HoldCorridor X2AbilityTemplate]
+LocFriendlyName="Hold Corridor"
+LocHelpText="Overwatch a short range cone of fire, attacking each target moving within at least once, ammo permitting."
+LocLongDescription="Overwatch a short range cone of fire, attacking each target moving within at least once, ammo permitting."
+
 
 [GO_Rifle_DefensivePosture X2AbilityTemplate]
 LocFriendlyName="Defensive Posture"
