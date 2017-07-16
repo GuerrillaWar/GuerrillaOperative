@@ -44,24 +44,18 @@ simulated function InitPromotion(StateObjectReference UnitRef, optional bool bIn
 
 simulated function PopulateData()
 {
-	local int i, MaxRank;
-	local string AbilityIcon1, AbilityIcon2, AbilityName1, AbilityName2, HeaderString;
-	local bool bHasAbility1, bHasAbility2;
 	local XComGameState_Unit Unit;
 	local GO_GameState_UnitDomainExperience UnitDomainState;
-	local X2AbilityTemplate AbilityTemplate1, AbilityTemplate2;
-	local X2AbilityTemplateManager AbilityTemplateManager;
   local X2StrategyElementTemplateManager Manager;
   local array<X2StrategyElementTemplate> Templates;
   local X2StrategyElementTemplate Template;
   local GO_AbilityDomainTemplate DomainTemplate;
   local GO_UIArmory_AbilityDomainRow DomainRow;
-  local int ix, StatIx;
+  local int ix;
 
 
 	Unit = GetUnit();
   UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
-	AbilityTemplateManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
 
 	AS_SetTitle("", strScreenTitle, "", "", "");
 
@@ -101,11 +95,9 @@ function LearnDomainAbility(
 )
 {
 	local XComGameState_Unit Unit;
-	local XComGameStateHistory History;
   local XComGameState NewGameState;
 	local GO_GameState_UnitDomainExperience UnitDomainState;
 
-	History = `XCOMHISTORY;
 	Unit = GetUnit();
   UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
 
@@ -125,8 +117,6 @@ function PreviewDomainAbility(
 )
 {
 	local XComGameState_Unit Unit;
-	local XComGameStateHistory History;
-  local XComGameState NewGameState;
   local X2StrategyElementTemplateManager Manager;
   local X2AbilityTemplateManager AbilityManager;
 	local string TmpStr;
@@ -134,11 +124,10 @@ function PreviewDomainAbility(
   local GO_AbilityDomainTemplate DomainTemplate;
   local X2AbilityTemplate AbilityTemplate;
   local GO_AbilityData AbilityData;
-	local GO_GameState_UnitDomainExperience UnitDomainState;
+	// local GO_GameState_UnitDomainExperience UnitDomainState;
 
-	History = `XCOMHISTORY;
 	Unit = GetUnit();
-  UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
+  // UnitDomainState = class'GuerrillaOperativeUtilities'.static.GetOrCreateUnitDomainExperience(Unit);
   Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
   DomainTemplate = GO_AbilityDomainTemplate(Manager.FindStrategyElementTemplate(DomainName));
   AbilityManager = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();

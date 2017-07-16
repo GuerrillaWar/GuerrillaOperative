@@ -74,3 +74,8 @@ LocPromotionPopupText="<Bullet/> There are no limits to how many Overwatch shots
 LocFriendlyName="Fire And Move"
 LocHelpText="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded with a move only action point."
 LocLongDescription="After a blue move, a 1 AP shot taken in the open (both targets flanking eachother), will be refunded with a move only action point."
+
+[GO_Explosive_ThrowAndMove X2AbilityTemplate]
+LocFriendlyName="Throw And Move"
+LocHelpText="After a blue move, grenade throwing will be refunded with a move only action point."
+LocLongDescription="After a blue move, grenade throwing will be refunded with a move only action point."

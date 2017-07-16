@@ -3,7 +3,6 @@ class GO_InsertBaseWeaponAbilities extends Object;
 static function AddBaseAbilitiesToWeapons()
 {
   local array<name> AbilityList;
-	local name AbilityName;
 
 	// I thought this would work to add the abilities that classes come with
   // standard but its not enough Gremlin skills work but nothing else does.

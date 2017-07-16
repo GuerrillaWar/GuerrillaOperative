@@ -124,7 +124,6 @@ simulated function ApplyUnitStats(
   local int Earned, ToSpend, Ix;
   local bool AbilityEarned;
   local GO_EarnedAbility EarnedAbilityIter;
-  local name AbilityName;
   local GO_AbilityData AbilityData;
   local UIIcon AbilityIcon;
   local int TextPaddingLeft, PaddingRight, FullExpWidth, ExpRequired, ExpWidth;
@@ -239,7 +238,6 @@ simulated function OnAbilityIconEvent(UIPanel Panel, int Cmd)
 {
   local UIIcon AbilityIcon;
   local int AbilityIx;
-  local name AbilityName;
   local GO_EarnedAbility EarnedAbilityIter;
   local bool AbilityEarned;
 

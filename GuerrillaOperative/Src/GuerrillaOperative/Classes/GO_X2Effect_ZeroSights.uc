@@ -8,7 +8,7 @@ var localized string ZeroSightsReason;
 function int GetZeroDistanceFromEffectState(XComGameState_Effect EffectState)
 {
   local int ZeroDistance;
-  local TTile ZeroTile;
+  // local TTile ZeroTile;
 	local XComWorldData WorldData;
   local XComGameStateHistory History;
   local XComGameState_Unit Shooter;
@@ -22,7 +22,7 @@ function int GetZeroDistanceFromEffectState(XComGameState_Effect EffectState)
     EffectState.ApplyEffectParameters.AbilityInputContext.SourceObject.ObjectID
   ));
   ShooterPosition = WorldData.GetPositionFromTileCoordinates(Shooter.TileLocation);
-  ZeroTile = WorldData.GetTileCoordinatesFromPosition(ZeroTarget);
+  // ZeroTile = WorldData.GetTileCoordinatesFromPosition(ZeroTarget);
   ZeroDistance = VSize(ShooterPosition - ZeroTarget) / WorldData.WORLD_StepSize;
 
   return ZeroDistance;
@@ -31,7 +31,6 @@ function int GetZeroDistanceFromEffectState(XComGameState_Effect EffectState)
 
 function GetToHitModifiers(XComGameState_Effect EffectState, XComGameState_Unit Attacker, XComGameState_Unit Target, XComGameState_Ability AbilityState, class<X2AbilityToHitCalc> ToHitType, bool bMelee, bool bFlanking, bool bIndirectFire, out array<ShotModifierInfo> ShotModifiers)
 {
-	local int i, j;
   local int ZeroDistance, TargetDistance, ZeroDiff;
   local int AimMod, CritMod;
   local ShotModifierInfo ModInfo;

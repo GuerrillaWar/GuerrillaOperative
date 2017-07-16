@@ -43,7 +43,6 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate CreateSetupAbility()
 {
 	local X2AbilityTemplate						Template;
-	local X2AbilityTrigger_EventListener		Listener;
 	local GO_X2Effect_SniperSetup                   SetupEffect;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
   local X2Condition_UnitEffects ExcludeEffects;
@@ -100,7 +99,6 @@ static function X2AbilityTemplate CreateSetupAbility()
 static function X2AbilityTemplate CreateZeroSightsAbility()
 {
 	local X2AbilityTemplate						Template;
-	local X2AbilityTrigger_EventListener		Listener;
   local X2AbilityTarget_Cursor            Cursor;
 	local GO_X2Effect_ZeroSights            ZeroEffect;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
@@ -163,7 +161,6 @@ static function X2AbilityTemplate CreateZeroSightsAbility()
 static function X2AbilityTemplate CreateReconByScopeAbility()
 {
 	local X2AbilityTemplate						Template;
-	local X2AbilityTrigger_EventListener		Listener;
   local X2AbilityTarget_Cursor            Cursor;
   local X2Effect_PersistentSquadViewer    ViewerEffect;
 	local X2AbilityCost_ActionPoints        ActionPointCost;
@@ -224,7 +221,6 @@ static function X2AbilityTemplate CreateReconByScopeAbility()
 static function X2AbilityTemplate CreateVitalPointTargetingAbility()
 {
 	local X2AbilityTemplate                 Template;
-	local X2AbilityCooldown                 Cooldown;
 	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
   local X2Effect_Knockback				KnockbackEffect;
 	local X2Condition_Visibility            TargetVisibilityCondition;
@@ -412,7 +408,6 @@ static function EventListenerReturn DisplacementTurnEndListener(Object EventData
 static function X2AbilityTemplate CreateLockdownAbility()
 {
 	local X2AbilityTemplate                 Template;
-	local X2AbilityToHitCalc_StandardAim    ToHitCalc;
   local X2Effect_Persistent               LockdownEffect;
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2AbilityCost_Ammo                AmmoCost;
@@ -488,12 +483,10 @@ static function X2AbilityTemplate CreateLockdownShotAbility()
 	local X2Condition_Visibility            TargetVisibilityCondition;
 	local X2AbilityCost_ReserveActionPoints ReserveActionPointCost;
   local X2AbilityTrigger_Event            Trigger;
-  local X2Condition_AbilityProperty       AbilityCondition;
   local X2Condition_UnitEffectsWithAbilitySource LockdownCondition;
   local X2Effect_RemoveEffects            LockdownRemoval;
   local X2AbilityTarget_Single            SingleTarget;
 	local X2AbilityCost_Ammo                AmmoCost;
-	local X2AbilityCost_ActionPoints        ActionPointCost;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Sniper_LockdownShot');
 

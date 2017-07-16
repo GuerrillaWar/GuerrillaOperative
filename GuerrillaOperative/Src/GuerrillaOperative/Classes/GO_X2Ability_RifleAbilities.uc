@@ -82,9 +82,6 @@ static function X2AbilityTemplate CreateDefensivePostureAbility()
 	local X2Effect_ReserveActionPoints      ReserveActionPointsEffect;
 	local array<name>                       SkipExclusions;
 	local GO_X2Effect_DefensivePosture      CoveringFireEffect;
-	local X2Condition_AbilityProperty       CoveringFireCondition;
-	local X2Condition_UnitProperty          ConcealedCondition;
-	local X2Effect_SetUnitValue             UnitValueEffect;
 	local X2Condition_UnitEffects           SuppressedCondition;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'GO_Rifle_DefensivePosture');

@@ -20,6 +20,9 @@ DisplayName="Pistol"
 [AbilityDomain_Rifle GO_AbilityDomainTemplate]
 DisplayName="Rifle"
 
+[AbilityDomain_Explosive GO_AbilityDomainTemplate]
+DisplayName="Explosives"
+
 [AbilityDomain_AutomaticWeapon GO_AbilityDomainTemplate]
 DisplayName="Automatic"
 

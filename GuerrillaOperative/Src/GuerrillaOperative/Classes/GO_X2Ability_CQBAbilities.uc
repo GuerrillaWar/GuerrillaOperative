@@ -27,7 +27,6 @@ static function array<X2DataTemplate> CreateTemplates()
 static function X2AbilityTemplate CreateHoldCorridorAbility()
 {
 	local X2AbilityTemplate             Template;
-	local X2AbilityCooldown             Cooldown;
 	local X2AbilityCost_Ammo            AmmoCost;
 	local X2AbilityCost_ActionPoints    ActionPointCost;
 	local X2AbilityTarget_Cursor        CursorTarget;

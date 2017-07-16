@@ -14,8 +14,8 @@ event ExpandHandler(string InString, out string OutString)
   local name Type;
   local XComGameState_Ability AbilityState;
   local XComGameState_Effect EffectState;
-  local XComGameState_Item ItemState;
-  local X2ItemTemplate ItemTemplate;
+  /* local XComGameState_Item ItemState; */
+  /* local X2ItemTemplate ItemTemplate; */
   local X2AbilityTemplate AbilityTemplate;
   /* local X2AbilityToHitCalc_StandardAim ToHitCalc; */
   /* local X2Effect EffectTemplate; */

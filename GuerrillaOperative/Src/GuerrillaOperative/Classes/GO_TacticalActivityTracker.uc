@@ -88,7 +88,6 @@ function ProcessDomainExperience (XComGameState NewGameState)
   local X2StrategyElementTemplate Template;
   local GO_AbilityDomainTemplate DomainTemplate;
   local XComGameStateHistory History;
-  local GO_UnitDomainStats DomainStats;
   local GO_DomainItemExperienceData ExperienceData;
   local int DomainIx, XPGained, EarnedRanks, StartingRanks;
 
@@ -385,12 +384,12 @@ function LogState ()
 // EVENTS
 function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
-  local XComGameState_Unit Killer, Target;
+  local XComGameState_Unit Killer; //, Target;
   local GO_TacticalActivityTracker Tracker;
   local XComGameState NewGameState;
 
   Killer = XComGameState_Unit(EventSource);
-  Target = XComGameState_Unit(EventData);
+  // Target = XComGameState_Unit(EventData);
 
   Tracker = GO_TacticalActivityTracker(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'GO_TacticalActivityTracker', true));
   NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("IncrementFromKillMail");
@@ -405,7 +404,6 @@ function EventListenerReturn OnKillMail(Object EventData, Object EventSource, XC
 function EventListenerReturn OnAbilityActivated(Object EventData, Object EventSource, XComGameState GameState, Name EventID)
 {
   local XComGameStateContext_Ability AbilityContext;
-  local AbilityResultContext ResultContext;
   local XComGameState_Ability Ability;
   local X2AbilityTemplate AbilityTemplate;
   local XComGameState_Unit Shooter;
@@ -424,7 +422,7 @@ function EventListenerReturn OnAbilityActivated(Object EventData, Object EventSo
   Ability = XComGameState_Ability(EventData);
   AbilityTemplate = Ability.GetMyTemplate();
   AbilityContext = XComGameStateContext_Ability(GameState.GetContext());
-  ResultContext = AbilityContext.ResultContext;
+  // ResultContext = AbilityContext.ResultContext;
 
   if (AbilityTemplate.Hostility != eHostility_Offensive) { return ELR_NoInterrupt; }
   if (AbilityContext.InterruptionStatus == eInterruptionStatus_Interrupt) { return ELR_NoInterrupt; }

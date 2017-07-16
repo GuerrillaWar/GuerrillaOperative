@@ -50,7 +50,7 @@ function RegisterForEvents()
 function EventListenerReturn AddArmoryMainMenuItem(Object EventData, Object EventSource, XComGameState NewGameState, Name InEventID)
 {
 	local UIList List;
-	local XComGameState_Unit Unit;
+	// local XComGameState_Unit Unit;
 
 	`LOG("AddArmoryMainMenuItem: Starting.");
 
@@ -67,10 +67,8 @@ function EventListenerReturn AddArmoryMainMenuItem(Object EventData, Object Even
 		return ELR_NoInterrupt;
 	}
 
-	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ArmoryMainMenu.UnitReference.ObjectID));
+	// Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ArmoryMainMenu.UnitReference.ObjectID));
 
-	// -------------------------------------------------------------------------------
-	// Leader Abilities: 
   WeaponAbilitiesButton = ArmoryMainMenu.Spawn(class'UIListItemString', List.ItemContainer).InitListItem(CAPS(default.strWeaponAbilitiesMenuText));
   WeaponAbilitiesButton.ButtonBG.OnClickedDelegate = OnWeaponAbilitiesButton;
   if(NextOnSelectionChanged == none)

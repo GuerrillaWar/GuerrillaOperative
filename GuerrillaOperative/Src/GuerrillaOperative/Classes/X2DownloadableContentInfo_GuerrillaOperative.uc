@@ -30,7 +30,6 @@ static function CheckDomainTemplates ()
   local GO_AbilityDomainTemplate DomainTemplate;
   local GO_AbilityData AbilityData;
   local X2StrategyElementTemplateManager Manager;
-  local name AbilityName;
 
   Manager = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
   Templates = Manager.GetAllTemplatesOfClass(class'GO_AbilityDomainTemplate');
@@ -63,7 +62,6 @@ static function CheckDomainTemplates ()
 
 static function FinalizeUnitAbilitiesForInit(XComGameState_Unit UnitState, out array<AbilitySetupData> SetupData, optional XComGameState StartState, optional XComGameState_Player PlayerState, optional bool bMultiplayerDisplay)
 {
-	local int Index;
   local GO_AbilityDomainTemplate DomainTemplate;
   local AbilitySetupData Setup, BlankSetupData;
   local X2StrategyElementTemplateManager Manager;
